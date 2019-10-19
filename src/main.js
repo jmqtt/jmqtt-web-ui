@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import '@/assets/scss/element-variables.scss'
 Vue.use(Element)
 
 // font-awesome icons

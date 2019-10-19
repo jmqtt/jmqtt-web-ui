@@ -7,18 +7,17 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path: '/login',
+      component: () => import('@/views/Login'),
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
       path: '',
       name: 'Layout',
       component: Layout,
-      children: [
-        {
-          path: '/login',
-          component: () => import('@/views/Login'),
-          meta: {
-            requiresAuth: false
-          }
-        }
-      ]
+      children: []
     }
   ]
 })

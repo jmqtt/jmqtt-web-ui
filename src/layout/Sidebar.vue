@@ -2,6 +2,8 @@
   <div class="leftbar-warpper">
     <el-scrollbar>
       <el-menu
+        :defaultOpeneds="defaultOpeneds"
+        :default-active="defaultActive"
         class="leftbar"
         unique-opened
         router
@@ -9,10 +11,8 @@
         text-color="var(--color-text-light)"
         active-text-color="var(--color-main-green)"
         collapse
-        :defaultOpeneds="defaultOpeneds"
-        :default-active="defaultActive"
         @select="menuSelected">
-        <el-menu-item class="el-submenu" index="/" :route="{ path: '/' }">
+        <el-menu-item :route="{ path: '/' }" class="el-submenu" index="/">
           <div class="menu-info">
             <i class="fa fa-home"/>
             <div class="menu-info--name">
@@ -20,45 +20,49 @@
             </div>
           </div>
         </el-menu-item>
-        <el-submenu v-for="menu in menus" :index="menu.code" :key="menu.id">
-          <template slot="title">
-            <div class="menu-info">
-              <i class="material-icons">{{ menu.icon }}</i>
-              <div class="menu-info--name">
-                {{ $t(`resource.${menu.code}`) }}
-              </div>
-            </div>
-          </template>
-          <el-menu-item
-            v-for="subMenu in menu.children"
-            v-if="subMenu.id"
-            :class="{ 'only-one': menu.children.length === 1 }"
-            :index="subMenu.tabs === 1 ? subMenu.children[0].url  : `/${subMenu.code}`"
-            :key="subMenu.id">{{ $t(`resource.${subMenu.code}`) }}
-          </el-menu-item>
-        </el-submenu>
+        <!--<el-submenu v-for="menu in menus" :index="menu.code" :key="menu.id">-->
+          <!--<template slot="title">-->
+            <!--<div class="menu-info">-->
+              <!--<i class="material-icons">{{ menu.icon }}</i>-->
+              <!--<div class="menu-info&#45;&#45;name">-->
+                <!--{{ $t(`resource.${menu.code}`) }}-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</template>-->
+          <!--<el-menu-item-->
+            <!--v-for="subMenu in menu.children"-->
+            <!--v-if="subMenu.id"-->
+            <!--:class="{ 'only-one': menu.children.length === 1 }"-->
+            <!--:index="subMenu.tabs === 1 ? subMenu.children[0].url : `/${subMenu.code}`"-->
+            <!--:key="subMenu.id">{{ $t(`resource.${subMenu.code}`) }}-->
+          <!--</el-menu-item>-->
+        <!--</el-submenu>-->
       </el-menu>
     </el-scrollbar>
   </div>
 </template>
-
-
 <script>
 import { Scrollbar } from 'element-ui'
 
 export default {
-  name: 'leftbar',
-
+  name: 'Sidebar',
   components: { 'el-scrollbar': Scrollbar },
 
   data() {
     return {
       btnLoading: false,
       defaultOpeneds: [],
-      defaultActive: this.$route.path.replace(/\/\d+/g, ''),
+      defaultActive: this.$route.path.replace(/\/\d+/g, '')
     }
   },
-
+  computed: {
+    leftbarWidth() {
+      return this.$store.state.accounts.leftbar.width
+    },
+    menus() {
+      return this.$store.state.accounts.menus
+    }
+  },
   watch: {
     leftbarWidth() {
       this.menuActive()
@@ -66,18 +70,11 @@ export default {
     // Listen for route changes, change the navigation bar highlighting
     $route() {
       this.menuActive()
-    },
+    }
   },
-
-  computed: {
-    leftbarWidth() {
-      return this.$store.state.accounts.leftbar.width
-    },
-    menus() {
-      return this.$store.state.accounts.menus
-    },
+  created() {
+    this.menuActive()
   },
-
   methods: {
     menuSelected(key) {
       if (key === '/') {
@@ -107,16 +104,10 @@ export default {
           }
         })
       })
-    },
-  },
-
-  created() {
-    this.menuActive()
-  },
+    }
+  }
 }
 </script>
-
-
 <style lang="scss">
 @import "~@/assets/scss/variable.scss";
 

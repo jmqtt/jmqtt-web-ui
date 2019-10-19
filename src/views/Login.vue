@@ -14,20 +14,26 @@
           <div class="gradient-bg">
             <el-form>
               <el-form-item>
-                <i class="iconfont icon-email icon"/>
                 <el-input
                   v-model="email"
                   :class="{ error: loginError.email }"
-                  placeholder="请输入用户名"/>
+                  placeholder="请输入用户名">
+                  <el-button slot="prepend">
+                    <i class="fa fa-user"/>
+                  </el-button>
+                </el-input>
               </el-form-item>
               <el-form-item>
-                <i class="fa fa-lock"/>
                 <el-input
                   v-model="password"
                   :class="{ error: loginError.password }"
                   placeholder="请输入密码"
                   type="password"
-                  @keyup.enter.native="login"/>
+                  @keyup.enter.native="login">
+                  <el-button slot="prepend">
+                    <i class="fa fa-lock"/>
+                  </el-button>
+                </el-input>
               </el-form-item>
             </el-form>
             <div>
@@ -140,7 +146,7 @@
   }
 </script>
 <style lang="scss">
-  @import "~@/assets/scss/variable.scss";
+  @import "@/assets/scss/variable.scss";
 
   .login-view {
     background-color: #333844;
@@ -223,20 +229,6 @@
           height: 36px;
           line-height: 36px;
           border-radius: 50px;
-        }
-        .el-input__inner {
-          height: 36px;
-          background-color: transparent;
-          border: 0;
-          padding: 0 20px 0 50px;
-          color: #b6bac5;
-          border-radius: 50px;
-        }
-        .icon {
-          position: absolute;
-          left: 20px;
-          z-index: 1;
-          font-size: 20px;
         }
       }
       .signup {
