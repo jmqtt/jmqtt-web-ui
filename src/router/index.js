@@ -19,7 +19,10 @@ export default new Router({
       component: Layout,
       children: [{
         path: '/dashboard',
-        component: () => import('@/views/test/List')
+        component: () => import('@/views/dashboard/Index')
+      }, {
+        path: '/products',
+        component: () => import('@/views/products/List')
       }]
     }
   ]

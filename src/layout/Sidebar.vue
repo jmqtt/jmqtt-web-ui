@@ -17,6 +17,41 @@
             <div class="menu-info--name">首页</div>
           </div>
         </el-menu-item>
+        <el-submenu index="1">
+          <template slot="title">
+            <div class="menu-info">
+              <i class="fa fa-microchip"/>
+              <div class="menu-info--name">
+                设备管理
+              </div>
+            </div>
+          </template>
+          <el-menu-item>
+            设备管理
+          </el-menu-item>
+          <el-menu-item>
+            产品管理
+          </el-menu-item>
+          <el-menu-item>
+            设备日志
+          </el-menu-item>
+        </el-submenu>
+        <el-submenu index="2">
+          <template slot="title">
+            <div class="menu-info">
+              <i class="fa fa-bell-o"/>
+              <div class="menu-info--name">
+                告警管理
+              </div>
+            </div>
+          </template>
+          <el-menu-item>
+            当前告警
+          </el-menu-item>
+          <el-menu-item>
+            历史告警
+          </el-menu-item>
+        </el-submenu>
       </el-menu>
     </el-scrollbar>
   </div>
@@ -101,7 +136,7 @@ export default {
     margin: 0 auto;
     text-align: center;
   }
-  .material-icons {
+  .fa {
     display: block;
     margin: 0 auto;
     height: 44px;
