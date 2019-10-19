@@ -25,7 +25,7 @@
                 <el-input
                   v-model="password"
                   :class="{ error: loginError.password }"
-                  :placeholder="请输入密码"
+                  placeholder="请输入密码"
                   type="password"
                   @keyup.enter.native="login"/>
               </el-form-item>
