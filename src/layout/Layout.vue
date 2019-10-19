@@ -13,16 +13,17 @@ import Sidebar from './Sidebar'
 
 export default {
   name: 'Layout',
-
   components: { Navbar, Sidebar },
   created() {
+    const { classList } = document.getElementsByTagName('body')[0]
+    classList.add('light-theme')
   },
   methods: {
   }
 }
 </script>
 <style lang="scss">
-@import "@/assets/scss/variable.scss";
+@import "../assets/scss/variable.scss";
 
 .home-view {
   min-height: 100%;
