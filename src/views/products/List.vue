@@ -11,44 +11,33 @@
           </template>
           <span v-else class="crud-title">产品</span>
         </el-col>
-        <el-col :span="6">
-          <emq-button
-            class="create-btn"
-            @click="newProduct">
-            + 新建
-          </emq-button>
-        </el-col>
       </el-row>
     </div>
     <empty-page v-if="isEmpty" :empty-info="productsEmptyInfo"/>
     <div class="emq-card-list-view product-card-list">
       <el-row v-loading="loading" :gutter="20">
-        <el-col v-for="(record, index) in records" :key="index" :span="8">
+        <el-col v-for="(record, index) in list" :key="index" :span="8">
           <el-card class="box-card" @click.native="showDetails(record, 'view')">
             <div slot="header" class="clearfix">
               <span>{{ record.productName }}</span>
               <el-dropdown
-                v-if="(has(`PUT,${url}/:id`) || has(`DELETE,${url}`))"
                 :show-timeout="0"
                 class="card-dropdown"
                 trigger="click">
                 <el-button type="text" @click.stop >
-                  <i class="material-icons" style="color: #a7a7a7;">more_vert</i>
+                  <i class="fa fa-ellipsis-v" style="color: #a7a7a7;"/>
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
                   <a
-                    v-if="has(`PUT,${url}/:id`)"
                     href="javascript:;"
                     @click="showDetails(record, 'edit')">
                     <el-dropdown-item>
-                      <i class="iconfont icon-emq-edit"/>
-                      {{ $t('oper.edit') }}
+                      <i class="fa fa-edit"/> 编辑
                     </el-dropdown-item>
                   </a>
-                  <a v-if="has(`DELETE,${url}`)" href="javascript:;" @click="showConfirmDialog(record.id)">
+                  <a href="javascript:;" @click="showConfirmDialog(record.id)">
                     <el-dropdown-item>
-                      <i class="iconfont icon-emq-delete"/>
-                      {{ $t('oper.delete') }}
+                      <i class="fa fa-trash"/> 删除
                     </el-dropdown-item>
                   </a>
                 </el-dropdown-menu>
@@ -57,31 +46,44 @@
             <el-form>
               <el-row>
                 <el-col :span="12">
-                  <el-form-item :label="`${$t('products.deviceNum')}：`">
+                  <el-form-item label="设备数量">
                     <template>
                       <a @click.stop="showDetails(record, 'tab', 'devices')">
                         {{ record.deviceCount }}
                       </a>
-                      <span>{{ $t('products.tai') }}</span>
+                      <span>台</span>
                     </template>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item :label="`${$t('products.dataPoints')}：`">
+                  <el-form-item label="功能点">
                     <template>
                       <span v-if="record.dataPointCount === '-'">{{ record.dataPointCount }}</span>
                       <div v-else>
                         <a @click.stop="showDetails(record, 'tab', 'definition')">
                           {{ record.dataPointCount }}
                         </a>
-                        <span>{{ $t('products.ge') }}</span>
+                        <span>个</span>
                       </div>
                     </template>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12"/>
                 <el-col :span="12">
-                  <el-form-item :label="`${$t('products.dataStreams')}：`">
+                  <el-form-item label="应用">
+                    <template>
+                      <span v-if="record.appCount === '-'">{{ record.appCount }}</span>
+                      <div v-else>
+                        <a
+                          @click.stop="showDetails(record, 'tab', 'definition')">
+                          {{ record.appCount }}
+                        </a>
+                        <span>个</span>
+                      </div>
+                    </template>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="数据流">
                     <template>
                       <span v-if="record.dataStreamCount === '-'">{{ record.dataStreamCount }}</span>
                       <div v-else>
@@ -89,7 +91,7 @@
                           @click.stop="showDetails(record, 'tab', 'definition')">
                           {{ record.dataStreamCount }}
                         </a>
-                        <span>{{ $t('products.ge') }}</span>
+                        <span>个</span>
                       </div>
                     </template>
                   </el-form-item>
@@ -97,8 +99,8 @@
               </el-row>
             </el-form>
             <div class="cloud-protocol-tag">
-              <span class="left-triangle"/>
-              <span class="white-point"/>
+              <i class="left-triangle"/>
+              <i class="white-point"/>
               {{ record.cloudProtocolLabel }}
             </div>
           </el-card>
@@ -108,8 +110,8 @@
     <div class="footer">
       <el-pagination
         v-if="total>9"
-        :current-page.sync="currentPage"
-        :page-size="pageSize"
+        :current-page.sync="listQuery.page"
+        :page-size="listQuery.pageSize"
         :total="total"
         background
         layout="prev, pager, next"
@@ -132,17 +134,13 @@
       return {
         list: [],
         total: 0,
-        listLoading: true,
         listQuery: {
-          mac: '',
-          type: 'ALL',
           page: 1,
           pageSize: 10
         },
         loading: false,
         confirmDialogVisible: false,
         url: this.$route.path,
-        records: [],
         willDeleteId: undefined,
         isEmpty: false,
         tenantType: '',
@@ -177,8 +175,8 @@
         this.loading = true
         ProductsApi.list().then((response) => {
           this.total = response.data.meta.count
-          this.records = response.data.items
-          if (!this.records.length) {
+          this.list = response.data.items
+          if (!this.list.length) {
             this.isEmpty = true
           }
           this.loading = false
