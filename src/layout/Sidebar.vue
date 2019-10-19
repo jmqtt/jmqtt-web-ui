@@ -2,7 +2,7 @@
   <div class="leftbar-warpper">
     <el-scrollbar>
       <el-menu
-        :defaultOpeneds="defaultOpeneds"
+        :default-openeds="defaultOpeneds"
         :default-active="defaultActive"
         class="leftbar"
         unique-opened
@@ -10,33 +10,13 @@
         background-color="var(--color-bg-card)"
         text-color="var(--color-text-light)"
         active-text-color="var(--color-main-green)"
-        collapse
-        @select="menuSelected">
+        collapse>
         <el-menu-item :route="{ path: '/' }" class="el-submenu" index="/">
           <div class="menu-info">
             <i class="fa fa-home"/>
-            <div class="menu-info--name">
-              {{ $t('resource.dashboard') }}
-            </div>
+            <div class="menu-info--name">首页</div>
           </div>
         </el-menu-item>
-        <!--<el-submenu v-for="menu in menus" :index="menu.code" :key="menu.id">-->
-          <!--<template slot="title">-->
-            <!--<div class="menu-info">-->
-              <!--<i class="material-icons">{{ menu.icon }}</i>-->
-              <!--<div class="menu-info&#45;&#45;name">-->
-                <!--{{ $t(`resource.${menu.code}`) }}-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</template>-->
-          <!--<el-menu-item-->
-            <!--v-for="subMenu in menu.children"-->
-            <!--v-if="subMenu.id"-->
-            <!--:class="{ 'only-one': menu.children.length === 1 }"-->
-            <!--:index="subMenu.tabs === 1 ? subMenu.children[0].url : `/${subMenu.code}`"-->
-            <!--:key="subMenu.id">{{ $t(`resource.${subMenu.code}`) }}-->
-          <!--</el-menu-item>-->
-        <!--</el-submenu>-->
       </el-menu>
     </el-scrollbar>
   </div>
@@ -55,56 +35,9 @@ export default {
       defaultActive: this.$route.path.replace(/\/\d+/g, '')
     }
   },
-  computed: {
-    leftbarWidth() {
-      return this.$store.state.accounts.leftbar.width
-    },
-    menus() {
-      return this.$store.state.accounts.menus
-    }
-  },
-  watch: {
-    leftbarWidth() {
-      this.menuActive()
-    },
-    // Listen for route changes, change the navigation bar highlighting
-    $route() {
-      this.menuActive()
-    }
-  },
   created() {
-    this.menuActive()
   },
   methods: {
-    menuSelected(key) {
-      if (key === '/') {
-        this.defaultOpeneds = []
-      }
-    },
-    menuActive() {
-      // Convert url like '/devices/devices/{number}*' to '/devices/devices'
-      const currentPath = this.$route.path.replace(/\/\d+\/*.*/g, '')
-      this.defaultActive = currentPath
-
-      // Store secondary menu
-      let children = []
-      this.menus.forEach((menu) => {
-        children = children.concat(menu.children)
-      })
-      children.forEach((child) => {
-        if (!child.children) {
-          return
-        }
-        child.children.forEach((childChild) => {
-          // If the menu has tabs, set the active highlight to the url for the first element of tabs.
-          if (child.tabs === 1) {
-            if (childChild.url === currentPath) {
-              this.defaultActive = child.children[0].url
-            }
-          }
-        })
-      })
-    }
   }
 }
 </script>

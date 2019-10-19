@@ -1,6 +1,6 @@
 <template>
   <div class="home-view">
-    <Navbar @setTheme="setTheme" @setLang="setLang"/>
+    <Navbar/>
     <Sidebar/>
     <div class="home-content">
       <router-view/>
@@ -16,29 +16,13 @@ export default {
 
   components: { Navbar, Sidebar },
   created() {
-    this.setTheme()
   },
   methods: {
-    setTheme() {
-      const { classList } = document.getElementsByTagName('body')[0]
-      const currentTheme = this.$store.state.accounts.currentTheme || 'light'
-      if (currentTheme === 'light') {
-        classList.add('light-theme')
-        classList.remove('dark-theme')
-      } else if (currentTheme === 'dark') {
-        classList.add('dark-theme')
-        classList.remove('light-theme')
-      }
-    },
-    setLang(lang) {
-      document.querySelector('html').setAttribute('lang', lang)
-      this.$i18n.locale = lang
-    }
   }
 }
 </script>
 <style lang="scss">
-@import "~@/assets/scss/variable.scss";
+@import "@/assets/scss/variable.scss";
 
 .home-view {
   min-height: 100%;

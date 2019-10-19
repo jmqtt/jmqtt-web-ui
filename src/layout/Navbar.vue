@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="topbar">
-
       <div class="site-title">
         <a href="/">
           <img alt="logo" src="/static/images/logo.png">
@@ -17,102 +16,20 @@ export default {
   name: 'Navbar',
   data() {
     return {
-      logoSrc: '',
-      leftbarWidth: this.$store.state.accounts.leftbar.width,
-      companyInfoDialogVisible: false,
-      passwrodDialogVisible: false,
-      themeDialogVisible: false,
-      languageDialogVisible: false,
-      theme: this.$store.state.accounts.currentTheme,
-      language: this.$store.state.accounts.lang,
-      btnLoading: false,
-      messageVisible: false,
-      currentCompany: {},
-      searchValue: '',
-      options: [],
-      selectLoading: false,
-      changePasswordForm: {
-        oldPassword: '',
-        password: '',
-        confirmPassword: ''
-      },
-      changePasswordRules: {
-        oldPassword: [
-          { required: true, message: this.$t('topBar.oldPasswordRequired') },
-          { min: 6, message: this.$t('topBar.passwordLength') },
-        ],
-        password: [
-          { required: true, message: this.$t('topBar.newPasswordRequired') },
-          { min: 6, message: this.$t('topBar.passwordLength') },
-        ],
-        confirmPassword: [
-          { required: true, validator: this.validatePassword },
-          { min: 6, message: this.$t('topBar.passwordLength') },
-        ]
-      },
-      changeCompanyInfoRules: {
-        contactEmail: [
-          { required: true, message: this.$t('topBar.emailRequired'), trigger: 'blur' },
-          { type: 'email', message: this.$t('topBar.emailIllegal'), trigger: 'blur,change' },
-        ]
-      }
+      logoSrc: ''
     }
   },
-
   computed: {
-    user() {
-      return this.$store.state.accounts.user
-    },
-    logo() {
-      const currentTheme = this.$store.state.accounts.currentTheme
-      const fileName = currentTheme === 'dark' ? 'userLogoDark' : 'userLogo'
-      return this.$store.state.accounts[fileName]
-    }
   },
   methods: {
-    // Left navigation switch
-    leftbarSwitch() {
-      this.leftbarWidth = this.leftbarWidth === 'wide' ? 'narrow' : 'wide'
-      this.LEFTBAR_SWITCH({ leftbar: { width: this.leftbarWidth } })
-    },
-    // Top right menu command
-    handleCommand(command) {
-      if (command === 'changeCompanyInfo') {
-        this.getCompanyInfo()
-        this.companyInfoDialogVisible = true
-      }
-      if (command === 'changePassword') {
-        this.changePasswordForm = {}
-        this.passwrodDialogVisible = true
-      }
-      if (command === 'toggleTheme') {
-        this.themeDialogVisible = true
-      }
-      if (command === 'toggleLanguage') {
-        this.languageDialogVisible = true
-      }
-      if (command === 'logout') {
-        this.logout()
-      }
-    },
-    // Change Password
-    // Sign out
     logout() {
-      this.USER_LOGOUT()
-      this.CLEAR_BASE()
       this.$router.push({ path: '/login' })
-    },
-    // Load logo
-    loadLogo() {
-      const currentTheme = this.$store.state.accounts.currentTheme
-      const fileName = currentTheme === 'dark' ? 'userLogoDark' : 'userLogo'
-      this.logoSrc = this.$store.state.accounts[fileName]
     }
   }
 }
 </script>
 <style lang="scss">
-@import "~@/assets/scss/variable.scss";
+@import "@/assets/scss/variable.scss";
 
 .topbar {
   position: fixed;
